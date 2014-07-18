@@ -54,6 +54,7 @@ public class HomeWork
 
 >실장님이 좋아하는 마틴느님의 그림이 삽입이 안되네..
 
+![di](http://martinfowler.com/articles/injector.gif)
 >출처 : http://martinfowler.com/articles/injection.html
 
 >여기 figure2 에서처럼 두개의 소스파일 사이에는 Assembler 와 같이 중개자(?) 같은게 있다.
