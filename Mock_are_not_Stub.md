@@ -20,8 +20,7 @@ Mock aren't Stub.
 
 
 
-#모의객체를 이용한 테스트
-(Tests with Mock Objects)
+#모의객체를 이용한 테스트 (Tests with Mock Objects)
 
 
 **setup 단계**
@@ -36,9 +35,7 @@ Mock aren't Stub.
 
 
 
-#모의객체와 스텁의 차이 
-
-(The Difference Between Mocks and Stubs)
+#모의객체와 스텁의 차이 (The Difference Between Mocks and Stubs)
 -mock은 테스트에서 실제 real DB를 사용하지 않는 방법중에 하나 인데, 이런 것에는 여러가지 언어들이 있다.
 
 **Test Double 이란?**
@@ -69,8 +66,7 @@ Mock aren't Stub.
 
 
 
-#차이점들 중에서 선택하기 
-(Choosing Between the Differences)
+#차이점들 중에서 선택하기 (Choosing Between the Differences)
 
 TDD 운전 (Driving TDD)Mockist TDD 는 시스템 외부에서 철번째 테스트를 작성하면서 스토리를 개발 (outside-in) 
 필요성 주도 개발 스타일 = need-driven development
