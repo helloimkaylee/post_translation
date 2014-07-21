@@ -14,13 +14,13 @@ Mock aren't Stub.
 -> Classical Style of TDD.
 
 
-#일반적인 테스트 (Regular Tests)
+##일반적인 테스트 (Regular Tests)
 유닛테스트는 전형적인 네가지 단계의 순서를 따른다.
 - setup, exercise, verify, teardown
 
 
 
-#모의객체를 이용한 테스트 (Tests with Mock Objects)
+##모의객체를 이용한 테스트 (Tests with Mock Objects)
 
 
 **setup 단계**
@@ -35,8 +35,8 @@ Mock aren't Stub.
 
 
 
-#모의객체와 스텁의 차이 (The Difference Between Mocks and Stubs)
--mock은 테스트에서 실제 real DB를 사용하지 않는 방법중에 하나 인데, 이런 것에는 여러가지 언어들이 있다.
+##모의객체와 스텁의 차이 (The Difference Between Mocks and Stubs)
+mock은 테스트에서 실제 real DB를 사용하지 않는 방법중에 하나 인데, 이런 것에는 여러가지 언어들이 있다.
 
 **Test Double 이란?**
 테스트를 할때 진짜 객체대신 가짜 객체를 지칭하는 용어 이다.
@@ -55,8 +55,7 @@ Mock aren't Stub.
 
 
 
-#고전적 테스팅과 모의객체 테스팅 
-(Classical and Mockist Testing)
+##고전적 테스팅과 모의객체 테스팅 (Classical and Mockist Testing)
 **classical TDD:**
 중요한건 실제 객체를 사용하고 실제 객체를 사용하기 힘든것만 가짜객체를 사용 
 
@@ -66,7 +65,7 @@ Mock aren't Stub.
 
 
 
-#차이점들 중에서 선택하기 (Choosing Between the Differences)
+##차이점들 중에서 선택하기 (Choosing Between the Differences)
 
 TDD 운전 (Driving TDD)Mockist TDD 는 시스템 외부에서 철번째 테스트를 작성하면서 스토리를 개발 (outside-in) 
 필요성 주도 개발 스타일 = need-driven development
@@ -76,7 +75,7 @@ class TDD는 도메인 모델에 집중하면서 개발 그후 UI (middle-out)
 
 
 
-#픽스처 준비 (Fixture Setup)
+##픽스처 준비 (Fixture Setup)
 classic 은 많은 협력되어있는 객체들을 생성해야 하고, 보통 이러한 객체들은 테스트때마다 생성되고 사라진다.
 그러나 mockist 는 모의객체만을 작성하면 된다.
 
@@ -91,7 +90,7 @@ classic은 mock에게 재사용하면되지만 mock은 테스트때마다 만들
 
 
 
-#테스트의 고립성 (Test Isolation)
+##테스트의 고립성 (Test Isolation)
 mock으로 하면 그 메소드(?)만 실패하지만, classic은 다른 테스트가 실패할수도 있다.
 중요한 점은 모든 class에 대한 정교한 테스트가 확실하게 분리되어 있어야 한다.ebay에서 하던 test는 unit테스트로, 
 유닛테스트 이자 작은 통합테스트와 같았다.이는 다른점에서 보면 classic의 특징처럼 다른 테스트가 실패하게 만들기도 했다.
@@ -103,7 +102,7 @@ mock으로 하면 그 메소드(?)만 실패하지만, classic은 다른 테스�
 
 
 
-#테스트와 구현의 결합성 
+##테스트와 구현의 결합성 
 (Coupling Tests to Implementations)
 Class방식은 결과에만 집중하기 때문에 결합도가 낮은 반면, Mock은 메소드 구현에 많은 결합이 있을 수 있다.
 이러한 결합도 Coupling은 몇가지 문제를 발생할 수 있다.
@@ -113,6 +112,6 @@ Class방식은 결과에만 집중하기 때문에 결합도가 낮은 반면, M
 
 
 
-#설계 스타일 (Design Style)
+##설계 스타일 (Design Style)
 Mock은 외부에서 내부로 접근하는 outside-in방식,classic은 도메인부터 펼쳐나가는 스타일인 middle-out방식이다.
 
