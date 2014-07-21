@@ -20,7 +20,9 @@ Mock aren't Stub.
 
 ---------------------------
 
-#모의객체를 이용한 테스트(Tests with Mock Objects)
+#모의객체를 이용한 테스트
+
+**(Tests with Mock Objects)**
 
 
 **setup 단계**
@@ -35,7 +37,9 @@ Mock aren't Stub.
 
 ---------------------------
 
-#모의객체와 스텁의 차이 (The Difference Between Mocks and Stubs)
+#모의객체와 스텁의 차이 
+
+**(The Difference Between Mocks and Stubs)**
 -mock은 테스트에서 실제 real DB를 사용하지 않는 방법중에 하나 인데, 이런 것에는 여러가지 언어들이 있다.
 
 **Test Double 이란?**
@@ -55,7 +59,9 @@ Mock aren't Stub.
 
 ---------------------------
 
-#고전적 테스팅과 모의객체 테스팅 (Classical and Mockist Testing)
+#고전적 테스팅과 모의객체 테스팅 
+
+**(Classical and Mockist Testing)**
 **classical TDD:**
 중요한건 실제 객체를 사용하고 실제 객체를 사용하기 힘든것만 가짜객체를 사용 
 
@@ -65,7 +71,9 @@ Mock aren't Stub.
 
 ---------------------------
 
-#차이점들 중에서 선택하기 (Choosing Between the Differences) 
+#차이점들 중에서 선택하기 
+
+**(Choosing Between the Differences)**
 
 TDD 운전 (Driving TDD)Mockist TDD 는 시스템 외부에서 철번째 테스트를 작성하면서 스토리를 개발 (outside-in) 
 필요성 주도 개발 스타일 = need-driven development
@@ -103,7 +111,9 @@ mock으로 하면 그 메소드(?)만 실패하지만, classic은 다른 테스�
 
 ---------------------------
 
-#테스트와 구현의 결합성 (Coupling Tests to Implementations)
+#테스트와 구현의 결합성 
+
+**(Coupling Tests to Implementations)**
 Class방식은 결과에만 집중하기 때문에 결합도가 낮은 반면, Mock은 메소드 구현에 많은 결합이 있을 수 있다.
 이러한 결합도 Coupling은 몇가지 문제를 발생할 수 있다.
 1. 테스트 주도 개발의 영향
