@@ -22,6 +22,9 @@ Also, would the answer change if we were to replace await Task.Delay(5); with Th
 ```csharp
 A_1.
 result가 아직 초기화 되지 않아서 못 써묵는다.
+await Task.Delay(5)가 실행되는중에 SaySomething()은 다시 호출자에게 반환되어 Console.WriteLine()이 실행될때는 여전히 5초를 await 하고 있는 중이라 초기화 되지 않은 상태이다.
+
+await를 뺀 Task.Delay(5)는 기다려주지 않고 result를 실행하게 된다. 그래서 결과적으로 Hello World가 반환될 것.
 
 await 를 뺀 Thread.Sleep 은 비동기가 아닌 동기화 이다.
 출력은 Hello world가 나오겠지만 비동기 처리된건 아니다. 
@@ -44,7 +47,9 @@ if (time == null)
 
 A_2.
 같지 않다.
-왜냐믄 time이 널이 아니기 때문에?
+왜냐하면 Datetime은 variable Type 이다. 값 형식은 null이 아니라 0000처럼 초기값?을 가지고 있다.
+그게 bool이면 초기값이 false가 되는거고, Datetime이면 0001.01.01이 되는 거다.
+string은 reference type이라 참조가 없으면 null값이 가능하다.
 default 값이 null이 아니다. 
 ```
 
@@ -118,7 +123,12 @@ public sealed class Circle {
 write code to calculate the circumference of the circle, without modifying the Circle class itself.
 
 A_5.
+정답 : 
+static long TotalAllEvenNumbers(int[] intArray) {
+  return intArray.Where(i => i % 2 == 0).Sum(i => (long)i);
+}
 
+내답 : 
 using System;
 
 public class Program
