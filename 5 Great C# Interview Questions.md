@@ -119,4 +119,32 @@ write code to calculate the circumference of the circle, without modifying the C
 
 A_5.
 
+using System;
+
+public class Program
+{
+	public static void Main()
+	{
+	  	Circle circle = new Circle(10);	
+		Console.WriteLine(circle.Calculate(r => 2 * Math.PI * r));
+		Console.WriteLine(circle.Calculate(r => Math.PI * r * r));
+	}			
+	public sealed class Circle 
+	{	
+		private double radius;
+		
+		public Circle(double radius)
+		{
+			this.radius = radius;
+		}
+  
+  		public double Calculate(Func<double, double> op) 
+		{
+			
+			return op(radius);
+  		}
+	}
+	
+}
+
 ```
