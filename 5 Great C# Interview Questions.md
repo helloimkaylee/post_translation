@@ -75,8 +75,11 @@ time은 null이 안되니 default 값이 반환될듯
 
 ```csharp
 
+Q_4.
 Given an array of ints, write a C# method to total all the values that are even numbers.
 
+
+A_4.
 using System;
 					
 public class Program
@@ -97,5 +100,23 @@ public class Program
 		
 	}
 }
+
+```
+
+```csharp
+
+Q_5.
+Given an instance circle of the following class:
+
+public sealed class Circle {
+  private double radius;
+  
+  public double Calculate(Func<double, double> op) {
+    return op(radius);
+  }
+}
+write code to calculate the circumference of the circle, without modifying the Circle class itself.
+
+A_5.
 
 ```
