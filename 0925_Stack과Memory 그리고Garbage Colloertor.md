@@ -107,6 +107,47 @@ Heap Memory제거는 가비지 컬렉션이..!!
 
 
 
+가비지 컬렉터의 좋은 예!
+문자열 조합할때 '+'로 연결하면 간단히 문자열 조합이 이루어 지지만 모든 객체가 ToString()을 지원하기 때문에 문자열끼리만 조합되는게 아니라 int, float등의 값도 알아서 문자열로 변환 조합된다.
+
+```
+Class Names
+{
+    public string[] name = new string [100];
+    public void Print()
+    {
+        for(int index = 0; index < name.Length; index ++)
+        {
+            string output = "[" + index + "]" + name;
+            Console.WriteLine(output);
+        }
+    }
+}
+```
+문제는 이러면 가비지가 많이 발행한다는 점~.
+"+" 연산자로 두 값을 연결할 때마다 새로운 String 인스턴스가 생성된다. 연이어 "+" 연산자가 나오기 때문에 다시금 새로운 string 인스턴스가 생성되고, 이전에 만들어진 string 인스턴스는 가비지가 된다.
+
+string조합을 위해 "+" 호출이 많아질수록 많은 가비지가 만들어지는 것이다.
+
+그래서 문자열을 조합하는 동안 새로운 객체를 생성하지 않는 String.Text.StringBuilder 객체를 사용하는 것이 좋다.
+이는 Append()메소드를 통해 문자열을 추가하며, String객체를 만들어 내는게 아니라, 이미 잡아놓은 메모리 공간에 문자열만 복사해 뒀다가 한번에 ToString()으로 string 객체를 생성해 낸다.
+
+```
+class NewNames
+{
+    public string[] name = new string[100];
+    private StringBuilder sb = new StringBuilder();
+    public void Print()
+    {
+        sb.Clear();
+        for(int index = 0; index < name.Length; index ++)
+        {
+            sb.AppendFormat("[ {0} ] {1}", index, name.ToString());
+        }
+        Cosole.WriteLine(sb.Tostring());
+    }
+}
+```
 
 
 
