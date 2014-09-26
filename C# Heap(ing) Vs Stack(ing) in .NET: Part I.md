@@ -85,3 +85,8 @@ public int ReturnValue2()
 
 힙에 저장된걸 함께 참조 하고 있으니까, y에 값을 대입하면 y포인터가 가르키는 heap의 값이 바뀌게되고, 이는 x 의 포인트도 같은곳을 바라보고 있기 때문에 4인 것이다.
 
+
+
+참고 URL:
+
+[url]:(http://www.c-sharpcorner.com/UploadFile/rmcochran/csharp_memory01122006130034PM/csharp_memory.aspx?ArticleID=9adb0e3c-b3f6-40b5-98b5-413b6d348b91)
