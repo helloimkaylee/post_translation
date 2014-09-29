@@ -156,3 +156,63 @@ x 와 pValue는 같은 것을 보고 있으니, pValue.a가 변경되면 DoSomet
 
 그럼 reference type을 reference(ref)시키면 어떻게 될까?
 
+```
+    public class Thing
+    {
+        
+    }
+    
+    public class Animal:Thing
+    {
+        public int Weight;
+    }
+    
+    public class Vegetable:Thing
+    {
+        public int Length;
+    }
+    
+    
+    public void Go()
+    {
+        Thing x = new Animal();
+    
+        Switcharoo(ref x);
+    
+        Console.WriteLine(
+            "x is Animal    :   "
+            + (x is Animal).ToString());
+    
+        Console.WriteLine(
+            "x is Vegetable :   "
+            + (x is Vegetable).ToString());
+      
+    }
+    
+    public void Switcharoo(ref Thing pValue)
+    {
+        pValue = new Vegetable();
+    }
+    
+```
+
+코드문 순서를 먼저 보자.
+
+1. Go() 메소드를 호출하면 x 포인터는 스택에 생기고, Animal은 Heap에 생긴다.
+2. Switchroo()가 호출되면 파라메터 pValue는 x 포인터를 가르킨다.
+3. Vegetable()을 생성하면서 heap 에 생성된다.
+4. x포인터가 가르키는 heap 개체의 주소가 변경된다. 
+
+
+![part2_4](http://www.c-sharpcorner.com/UploadFile/rmcochran/csharp_memory2B01142006125918PM/Images/heapvsstack2-10.gif)
+
+결과적으로  Animal()은 더이상 사용하지 않게 되고 출력값은 아래와 같다.
+```
+x is Animal    :   False
+x is Vegetable :   True
+
+```
+만약 우리가 ref를 사용하지 않았더라면 결과값은 반대로 나왔을 것이다.
+
+
+
