@@ -216,3 +216,5 @@ x is Vegetable :   True
 
 
 
+참고[URL](http://www.c-sharpcorner.com/UploadFile/rmcochran/csharp_memory2B01142006125918PM/csharp_memory2B.aspx)
+
