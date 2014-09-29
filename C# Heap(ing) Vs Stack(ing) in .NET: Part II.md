@@ -119,6 +119,12 @@ x 와 pValue는 같은 것을 보고 있으니, pValue.a가 변경되면 DoSomet
 ###Passing Reference Type 
 
 ```
+
+  public class MyInt
+  {
+     public int MyValue;
+  }
+   
   public void Go()
   {
      MyInt x = new MyInt();
@@ -130,13 +136,23 @@ x 와 pValue는 같은 것을 보고 있으니, pValue.a가 변경되면 DoSomet
       
   }
 
-   public void DoSomething(MyInt pValue)
-   {
+  public void DoSomething(MyInt pValue)
+  {
        pValue.MyValue = 12345;
-   }
+  }
 
 
 
 ```
-MyInt는 클래스이니까  Reference Type 으로 Heap에 클래스가 생기겠죠?
+1. MyInt는 클래스이고, New로 생성했으니  Reference Type 으로 Heap에 클래스가 생기겠죠? heap을 참조해야되니 stack에는 x 라는 pointer만 생겼을테고,
+
+2. Dosomething에서 파라메터 pValue로 x를 받았으니 x pointer를 복사한 pValue pointer가 생긴다. 이 포인터도 x pointer와 같이 heap을 가르킨다. 
+
+![part2_3](http://www.c-sharpcorner.com/UploadFile/rmcochran/csharp_memory2B01142006125918PM/Images/heapvsstack2-8.gif)
+
+
+같은 것을 가르키고 있고 pValue.MyValue를 '12345'로 변경했으니, x 의 output역시 '12345'가 된다.
+
+
+그럼 reference type을 reference(ref)시키면 어떻게 될까?
 
