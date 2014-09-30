@@ -41,7 +41,7 @@ public class Dude
 
 ```
 
-1. Dude class는 valrialbe type 이다. shoe struct가 class의 맴버이고 그 클래스는 heap 에 있기때문이다.
+1. Dude class는 varialbe type 이다. Shoe struct가 class의 맴버이고 그 클래스는 heap 에 있기때문이다.
 
 ![part3_1](http://www.c-sharpcorner.com/UploadFile/rmcochran/chsarp_memory401152006094206AM/Images/heapvsstack3-1.gif)
 
