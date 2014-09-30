@@ -10,32 +10,32 @@ value type 이 heap에 있는것과 reference type 이 heap에 있는거와 뭐�
 2. CopyDude()메소드로 Dude 클래스를 새로 만든다.
 
 ```
-public struct shoe
+public struct Shoe
 {
-    public  string Color;
+	public  string Color;
 }
 
 public class Dude
 {
-    public string Name;
-    public Shoe RightShoe;
-    public Shoe LeftShoe;
-    
-    public Dude CopyDude()
-    {
-        Dude newPersion = new Dude();
-        newPerson.Name = Name;
-        newPerson.LeftShoe = LeftShoe;
-        newPerson.RightShoe = RightShoe;
-        
-        return newPerson;
-    }
-    
-    public override string Tostring()
-    {
-        return (Name + " :Dude!, I Have a " + RightShoe.Color +"
-         shoe on my right foot, and a " + LeftShoe.Color+ " on my left foot");
-    }
+	public string Name;
+	public Shoe RightShoe;
+	public Shoe LeftShoe;
+	
+	public Dude CopyDude()
+	{
+		Dude newPerson = new Dude();
+		newPerson.Name = Name;
+		newPerson.LeftShoe = LeftShoe;
+		newPerson.RightShoe = RightShoe;
+		
+		return newPerson;
+	}
+	
+	public override string ToString()
+	{
+		return (Name + " :Dude!, I Have a " + RightShoe.Color + 
+				"shoe on my right foot, and a " + LeftShoe.Color+ " on my left foot");
+	}
 }
 
 
@@ -55,20 +55,18 @@ public class Dude
 
 public static void Main()
 {
-    Class1 pgm = new Class1();
-    
-    Dude Bill = new Dude();
-    Bill.Name = "Bill";
-    Bill.LeftShoe = new Shoe();
-    Bill.RightShoe = new Shoe();
-    Bill.LeftShoe.Color = Bill.Rightshoe.Color = "Blue";
-    
-    Dude Ted = Bill.CopyDude();
-    Ted.Name = "Ted";
-    Ted.LeftShoe.Color = Ted.RightShoe.Color = "Red";
-    
-    Console.WriteLine(Bill.ToString());
-    Console.WriteLine(Ted.ToString());
+	Dude Bill = new Dude();
+	Bill.Name = "Bill";
+	Bill.LeftShoe = new Shoe();
+	Bill.RightShoe = new Shoe();
+	Bill.LeftShoe.Color = Bill.RightShoe.Color = "Blue";
+
+	Dude Ted = Bill.CopyDude();
+	Ted.Name = "Ted";
+	Ted.LeftShoe.Color = Ted.RightShoe.Color = "Red";
+
+	Console.WriteLine(Bill.ToString());
+	Console.WriteLine(Ted.ToString());
 }
 
 
@@ -87,10 +85,12 @@ Ted : Dude!, I have a Red shoe on my right foot, and a Red on my left foot.
 (위에 Shoe 는 struct로 value type 임)
 
 ```
-public class Shoe
-{
-    public string Color;
-}
+	//struct니까 값타입  --> 이럼 카피한 각각이 있으니 정상, 
+	//그러나 요걸 class로 바꾸면 바로 Bill & Ted 모두 빨간신발이 됨.
+    public class Shoe
+    {
+        public string Color;
+    }
 
 ```
 
@@ -124,29 +124,31 @@ Ted : Dude!, I have a Red shoe on my right foot, and a Red on my left foot
 
 이 인터페이스는 어떻게 shoe 라는 참조타입이 공유되는 에러를 피하고 우리가 원하는 결과값이 나오게끔 복제가 되는지 알 수 있을 것이다.
 
-복제(Clone)을 하려면 반드시 ICloneable interface를 사용해야 한다.
+ICloneable interface를 사용하려면 반드시 Clone을 만들어줘야 한다.
 
 ```
-ICloneable consists of one method: Clone()
-
-public object Clone()
-{
-
-}
-
-public class Shoe : ICloneable   //마법의 인터페이스 상속!
-{
-    public string Color;
-    #region ICloneable Members
+    ICloneable consists of one method: Clone()
     
     public object Clone()
     {
-        Shoe newShoe = new Shoe();
-        newShoe.Color = Color.Clone() as string;
-        return newShoe;
+    
     }
 
-}
+	//ICloneable 을 상속해주려면 clone()에 대해서 필요하다.
+    public class Shoe : ICloneable
+    {
+        public string Color;
+        #region ICloneable Members
+        
+        //그래서 여기에 새로 클론을 만들어주면됨.
+        public object Clone()
+        {
+            Shoe newShoe = new Shoe();
+            newShoe.Color = Color.Clone() as string;
+            return newShoe;
+        }
+    
+    }
 
 ```
 1. Clone()안에 Shoe를 생성하고, 모든 레퍼런스 타입을 복제하고 value type을 복사하고 새로운 오브젝트를 리턴한다.
@@ -160,6 +162,8 @@ public class Shoe : ICloneable   //마법의 인터페이스 상속!
     {
         Dude newPerson = new Dude();
          newPerson.Name = Name;
+         
+         //clone() 만들어 줬으니 적용해줘야지~!
          newPerson.LeftShoe = LeftShoe.Clone() as Shoe;
          newPerson.RightShoe = RightShoe.Clone() as Shoe;
 
@@ -180,53 +184,56 @@ public class Shoe : ICloneable   //마법의 인터페이스 상속!
 그럼 한단계 더 레벨업 해서 CopyDude() 대신에 ICloneable 써서 깔끔하게 처리해보자.
 
 ```
-public class Dude : ICloneable
-{
-    public string Name;
-    public Shoe RightShoe;
-    public Shoe LeftShoe;
-    
-    public override string ToString()
-    {
-        return (Name + " : Dude!, I have a " + RightShoe.Color  +
-                " shoe on my right foot, and a " +
-                 LeftShoe.Color + " on my left foot.");
-    }
-    
-    
-    public object Clone()
-    {
-        Dude newPersion = new Dude();
-        newPerson.Name = Name.Clone() as string;
-        newPerson.LeftShoe = LeftShoe.Clone() as Shoe;
-        newPerson.RightShoe = RightShoe.Clone() as Shoe;
-        
-        return newPerson;
-    }
-    
-    //그리고  Main() 안에는 Dude.Clone()을 사용하도록 수정
-    
-    public Static void Main()
-    {
-        Class1 pgm = new Class1();
-        
-        Dude Bill = new Dude();
-        Bill.Name = "Bill";
-        Bill.LeftShoe = new Shoe();
-        Bill.RightShoe = new Shoe();
-        Bill.LeftShoe.Clolr = Bill.RightShoe.Color = "Blue";
-        
-        //원래 요기가 Bill.CopyDude(); 였음 ㅎㅎ 
-        Dude Ted = Bill.Clone() as Dude;
-        Ted.Name = "Ted";
-        Ted.LeftShoe.Color = Ted.RightShoe.Color = "Red";
-        
-        Console.WriteLine(Bill.ToString());
-        Console.WriteLine(Ted.ToString());
-    }
 
+	//좀더 미국코딩스럽게 하기 위해서 Dude에 ICloneable을 상속 해주는 걸로 변경
+    public class Dude : ICloneable
+    {
+        public string Name;
+        public Shoe RightShoe;
+        public Shoe LeftShoe;
+        
+        public override string ToString()
+        {
+            return (Name + " : Dude!, I have a " + RightShoe.Color  +
+                    " shoe on my right foot, and a " +
+                     LeftShoe.Color + " on my left foot.");
+        }
+        
+        
+        public object Clone()
+        {
+            Dude newPersion = new Dude();
+            newPerson.Name = Name.Clone() as string;
+            newPerson.LeftShoe = LeftShoe.Clone() as Shoe;
+            newPerson.RightShoe = RightShoe.Clone() as Shoe;
+            
+            return newPerson;
+        }
+        
+        //그리고  Main() 안에는 Dude.Clone()을 사용하도록 수정
+        
+        public Static void Main()
+        {
+            Class1 pgm = new Class1();
+            
+            Dude Bill = new Dude();
+            Bill.Name = "Bill";
+            Bill.LeftShoe = new Shoe();
+            Bill.RightShoe = new Shoe();
+            Bill.LeftShoe.Clolr = Bill.RightShoe.Color = "Blue";
+            
+            //원래 요기가 Bill.CopyDude(); 였음 ㅎㅎ
+            //Dude에 clone을 만들어줬으니 클론해주면서 as Dude 라고 해줌.
+            Dude Ted = Bill.Clone() as Dude;
+            Ted.Name = "Ted";
+            Ted.LeftShoe.Color = Ted.RightShoe.Color = "Red";
+            
+            Console.WriteLine(Bill.ToString());
+            Console.WriteLine(Ted.ToString());
+        }
     
-}
+        
+    }
 
 ```
 
