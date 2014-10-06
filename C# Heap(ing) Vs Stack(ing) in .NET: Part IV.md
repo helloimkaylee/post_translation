@@ -73,17 +73,54 @@ Joseph Ivan Thomas (JIT) and Cindy Lorraine Richmond (CLR).
 
 ![part4_5](http://www.c-sharpcorner.com/UploadFile/rmcochran/csharp_memory_401282006141834PM/Images/Stacking_Heaping6.gif)
 
-이중에 2, 4가 더이상 참조되지 않으니 GC 대상이 된다.
+```
+Finalize구현한 객체(이하 Finalze객체)는 생성시 관리힙에 할당되고 추가로 종료큐(Finalization Queue)라는 별도의 자료구조에 객체의 포인터를 저장시키므로 구현하지 않은 객체보다 수명이 길다.
+- 1차 가비지컬렉션시 더 이상 참조가 없는 Finalize객체는 즉시 해제 하지않고 종료큐를 검사해 Finalize객체임을 확인하고  F접근가능큐(Freachable Queue)라는 또 다른 자료구조에 객체 포인터를 삽입한 후 종료 큐에서는 제거한다.
+F접근가능큐 역시 루트로 간주되며 메모리에 여전히 남아 있기 때문에 세대는 승격된다
+F접근가능큐에 객체의 포인터가 삽입되면 삽입된 객체들의 Finalize메소드를 호출하기 위한 별도의 전용 스레드가 실행되며 차례로 Finalize메소드를 호출한 후 해당 객체의 포인터를 F접근가능큐에서 제거한다. 이 과정을 거친 객체가 비로소 가비지가 되는것이다.
+- 2차 가비지 컬렉션시 위 1차 가비지컬렉션 시 가비지가 되었던 Finalize객체들이 비로소 메모리로부터 해제 된다.
+- 결국 Finalize객체는 메모리에서 해제되기 위해서 일반 객체에 비해 한번더 가비지 컬렉션이 필요하다. 그러나 세대가 승격 되기 때문에 가비지 컬렉터의 특성상 상위세대의 가비지컬렉션은 자주 일어나지 않으므로 더 이상 참조되지 않는다 해도 메모리에 오래 남아 있게 된다.
+ 
+# Finalize를 구현한 객체의 수명
+객체생성 → 종료큐에 객체포인터 저장 → 1차가비지컬렉션 → F접근가능큐로 객체포인터 이동 → 세대승격 → (별도 스레드에서 객체의 Finalize메소드 호출 및 큐의포인터제거) → 2차(다음번해당세대) 가비지 컬렉션 → 메모리 해제
 
-개체 4는 finalizer가 셋팅되어 있어서 finalization queue에 참조된 채로 시작한다. 
 
-2와 4중 4는 finalization queue에 들어가 있으나, 2는  queue에도 없으니 삭제!
-GC가 finalization queue 를 보고 '4는 여전히 heap에 참조 되어 있네~' 이러면서 얘를 Freachable queue로 보낸다. 
+```
+
+1차 가비지 컬렉션이 시작되면 
+이중에 2는 더이상 참조되지 않으니 GC 대상이 된다.
+
+개체 4는 finalize가 구현되어 있어서 finalization queue에 참조된 채로 시작한다. 
+이렇게되면 구현하지 않은 객체보다 수명이 길다.
+
+
+2와 4중 4는 finalization queue(종료 큐)에 들어가 있으나, 2는 더이상 참조가 없으므로 (queue에도 없으니) 삭제!
+GC가 finalization queue 를 보고 '4는 여전히 heap에 참조 되어 있네~' 이러면서 얘를 Freachable queue(접근가능 큐)로 보내면서 종료큐 (finalization queue)에서 삭제한다.
+
+두종류의 큐 모두 루트로 간주되며 메모리에 여전히 남아 있기 때문에 세대는 승격된다.
+
+
 
 ![part4_6](http://www.c-sharpcorner.com/UploadFile/rmcochran/csharp_memory_401282006141834PM/Images/Stacking_Heaping7.gif)
 
+ freachable queue(접근가능큐)에 객체의 포인터가 삽입되면 삽입된 개체들의 finalize 메소드를 호출하기 위해 별도의 전용 스레드가 실행되며 차레로 finalize메소드를 호출한 후 해당 객체의 포인터를 freachable queue 에서 제거한다. 
 
-그러다 finalizer가 개체4 스레드에 의해 실행이 끝나면 freachable queue에서 삭제된다. 그럼 이제 GC 컬렉션의 대상이 된다. ( 아까 개체 2처럼) 바로 사라지는게 아니라 다음 GC 회전때까진 살아있다.
+이 과정을 거친 객체가 비로소 가비지가 되는 것이다. 즉, 1차 가비지 컬렉션시 GC 컬렉션의 대상만 된다는 말씀!
+
+( 아까 개체 2처럼) 바로 사라지는게 아니라 다음 GC 회전때까진 살아있다.
+
+
+이제 2차 가비지 컬렉션이 시작되면, 1차 가비지컬렉션 시 가비지가 되었던 Finalize객체들이 비로소 메모리로부터 해제 된다.
+
+결국 Finalize객체는 메모리에서 해제되기 위해서 일반 객체에 비해 한번더 가비지 컬렉션이 필요하다. 그러나 세대가 승격 되기 때문에 가비지 컬렉터의 특성상 상위세대의 가비지컬렉션은 자주 일어나지 않으므로 더 이상 참조되지 않는다 해도 메모리에 오래 남아 있게 된다.
+
+
+잠깐 요약!
+
+### Finalize를 구현한 객체의 수명
+
+객체생성 → 종료큐(finalization queue)에 객체포인터 저장 → 1차가비지컬렉션 → F접근가능큐(freachable queue)로 객체포인터 이동 → 세대승격 → (별도 스레드에서 객체의 Finalize메소드 호출 및 큐의포인터제거) → 2차(다음번해당세대) 가비지 컬렉션 → 메모리 해제
+
 
 ![part4_7](http://www.c-sharpcorner.com/UploadFile/rmcochran/csharp_memory_401282006141834PM/Images/Stacking_Heaping8.gif)
 
@@ -131,4 +168,6 @@ GC 퍼포먼스를 상승시키기 위해 우리가 할 수있는 것들은..
 * GC안에서 근본적으로 조각조각들을 각각 던지는 것보단, 큰 메모리 덩어리를 함께 카피하는 것이 훨씬 더 쉽다.
 
 
-참고 [URL](http://www.c-sharpcorner.com/UploadFile/rmcochran/csharp_memory_401282006141834PM/csharp_memory_4.aspx)
+참고1 [URL](http://www.c-sharpcorner.com/UploadFile/rmcochran/csharp_memory_401282006141834PM/csharp_memory_4.aspx)
+
+참고2 [URL](http://blog.naver.com/softcool/110031255038)
