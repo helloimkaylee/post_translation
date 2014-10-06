@@ -7,9 +7,9 @@ Joseph Ivan Thomas (JIT) and Cindy Lorraine Richmond (CLR).
 조셉이라고 쓰고 저스트인타임이라고 부르는 친구 하나와, 신디라고 쓰고 CLR이라고 부르는 친구. ㅎㅎㅎ
 
 조셉과 신디는 그들이 유지해야되는 트랙 리스트를 우리에게 전달해준다. 
-우리는 필요하거나 유지하고싶은 어떤 것이든그 마스터 리스트를 그래프에 유지한다. 
+우리는 필요하거나 유지하고싶은 어떤 것이든 그 마스터 리스트를 그래프에 유지한다. 
 
-예를들어 TV를 보관하고 싶은데 리모콘은티비가 아니니까 버리는일은 없다. 티비와 리모콘을 함께 보관하겠지~. 마찬가지로 컴퓨터를 보관하고 싶으면 키보드와 모니터는 한 셋트니까 (분명) 함께 보관 할것이다 .
+예를들어 TV를 보관하고 싶은데 리모콘은 티비가 아니니까 버리는일은 없다. 티비와 리모콘을 함께 보관하겠지~. 마찬가지로 컴퓨터를 보관하고 싶으면 키보드와 모니터는 한 셋트니까 (분명) 함께 보관 할것이다 .
 
 이런 방식으로 GC가 무엇을 킵하고 버리는지 결정한다. JIT와 CLR 로 부터 루트(root)에 참조 되어 있는 리스트를 받아서 그래프에 보관해둔다.
 
@@ -21,6 +21,7 @@ Joseph Ivan Thomas (JIT) and Cindy Lorraine Richmond (CLR).
 접근할 수 없는 다른 개체는 이제 폐기됩니다.
 
 루트는 아래와 같은 것들을 보관한다.
+
 1. Global/ static ponters.
 2. Pointers on the stack.
 3. CPU register pointers.
@@ -28,7 +29,7 @@ Joseph Ivan Thomas (JIT) and Cindy Lorraine Richmond (CLR).
 
 ![part4_1](http://www.c-sharpcorner.com/UploadFile/rmcochran/csharp_memory_401282006141834PM/Images/Stacking_Heaping1.gif)
 
-곤리되는 힙과 루트가 있다.
+
 오브젝트 1,5 는 Root에서 직접 참조하고 3은 간접적으로 참조하고 있다.
 위 예시에처럼 1은 TV가 될 것이고, 3은 리모컨 정도가 될것이다.
 
@@ -50,9 +51,10 @@ Joseph Ivan Thomas (JIT) and Cindy Lorraine Richmond (CLR).
 
 이런식으로 4번도 착업 하면 중간중간 빈 공간없이 필요한 것들끼리 쫙~ 붙는다. 이게 바로 컴팩트된 힙 이란 말씀! ㅎㅎ
 
-이상태로 신디에게 새로운 개체를 요기에다가 (화살표 있는 곳) 넣어주면 된다고 알려 줄 수 있다.
+이상태로 신디에게 새로운 개체를 요기에다가 (맨위 노란 화살표 있는 곳) 넣어주면 된다고 알려 줄 수 있다.
 
 ![part4_4](http://www.c-sharpcorner.com/UploadFile/rmcochran/csharp_memory_401282006141834PM/Images/Stacking_Heaping5.gif)
+
 
 참고로 개체를 움직이는 짓은 매우 비용이 많이 든다. 
 그럼 이렇게 개체를 욺직이는 짓을 줄여줄 수 있다면  GC는 프로세스는 적게 카피하교 비용을 덜 발생시킬 것이다. 
@@ -60,6 +62,7 @@ Joseph Ivan Thomas (JIT) and Cindy Lorraine Richmond (CLR).
 
 
 ###CLR에 의해 관리되는 힙들 밖에있는 것들은 어떨까? (= Unmanaged, Non-Managed)
+
 
 집이 관리되는 힙이라고 하면, 청소를 시작하면 집은 청소가 가능하지만 차는 어떻게 관리하지? 만약 랩탑은 집에 있는데 랩탑 베터리는 차에 있다면..?
 
@@ -72,13 +75,15 @@ Joseph Ivan Thomas (JIT) and Cindy Lorraine Richmond (CLR).
 
 이중에 2, 4가 더이상 참조되지 않으니 GC 대상이 된다.
 
-2와 4중 4는  queue에 들어가 있으나, 2는  queue에도 없으니 삭제!
-GC가 finalization queue 를 보고 4는 여전히 heap에 참조 되어 있네 이러면서 얘를 Freachable queue로 보낸다. 
+개체 4는 finalizer가 셋팅되어 있어서 finalization queue에 참조된 채로 시작한다. 
+
+2와 4중 4는 finalization queue에 들어가 있으나, 2는  queue에도 없으니 삭제!
+GC가 finalization queue 를 보고 '4는 여전히 heap에 참조 되어 있네~' 이러면서 얘를 Freachable queue로 보낸다. 
 
 ![part4_6](http://www.c-sharpcorner.com/UploadFile/rmcochran/csharp_memory_401282006141834PM/Images/Stacking_Heaping7.gif)
 
 
-그러다 finalizer가 개체4 스레드에 의해 샐행되면 freachable queue에서 삭제된다. 그럼 이제 GC 컬렉션의 대상이 된다. ( 아까 개체 2처럼) 바로 사라지는게 아니라 다음 GC 회전때까진 살아있다.
+그러다 finalizer가 개체4 스레드에 의해 실행이 끝나면 freachable queue에서 삭제된다. 그럼 이제 GC 컬렉션의 대상이 된다. ( 아까 개체 2처럼) 바로 사라지는게 아니라 다음 GC 회전때까진 살아있다.
 
 ![part4_7](http://www.c-sharpcorner.com/UploadFile/rmcochran/csharp_memory_401282006141834PM/Images/Stacking_Heaping8.gif)
 
@@ -108,6 +113,8 @@ using(rec)
 
 ###결론
 GC 퍼포먼스를 상승시키기 위해 우리가 할 수있는 것들은..
+
+
 1. Clean Up !
 * 리소스를 오픈해놓은 채로 떠나지마라! 반드시 오픈되어있는 커넥션과 관리되지 않는 오브젝트는 최대한 빨리 close시켜라.
 
